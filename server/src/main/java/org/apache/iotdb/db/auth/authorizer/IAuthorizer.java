@@ -27,12 +27,13 @@ import org.apache.iotdb.db.auth.entity.User;
 
 /**
  * This interface provides all authorization-relative operations.
+ * 这个接口提供了授权相关的操作
  */
-/* 这个接口提供了授权相关的操作 */
 public interface IAuthorizer {
 
     /**
      * Login for a user.
+     * 用户登录接口
      *
      * @param username The username of the user.
      * @param password The password of the user.
@@ -43,15 +44,17 @@ public interface IAuthorizer {
 
     /**
      * Create a user with given username and password. New users will only be granted no privileges.
+     * 通过给定的用户名+密码来创建一个用户，新用户被授权没有权限
      *
      * @param username is not null or empty
      * @param password is not null or empty
-     * @throws AuthException if the given username or password is illegal or the user already exists.
+     * @throws AuthException if the given username or password is illegal or the user already exists. 用户名密码非法，或者用户已经存在，抛出异常
      */
     void createUser(String username, String password) throws AuthException;
 
     /**
      * Delete a user.
+     * 删除用户
      *
      * @param username the username of the user.
      * @throws AuthException When attempting to delete the default administrator or the user does not
@@ -61,18 +64,20 @@ public interface IAuthorizer {
 
     /**
      * Grant a privilege on a seriesPath to a user.
+     * 授权一个路径到某个用户
      *
-     * @param username    The username of the user to which the privilege should be added.
+     * @param username    The username of the user to which the privilege should be added.  需要被添加的用户名
      * @param path        The seriesPath on which the privilege takes effect. If the privilege is a
-     *                    seriesPath-free privilege, this should be "root".
-     * @param privilegeId An integer that represents a privilege.
+     *                    seriesPath-free privilege, this should be "root". 权限将产生作用的路径，
+     * @param privilegeId An integer that represents a privilege. 代表权限的一个数字
      * @throws AuthException If the user does not exist or the privilege or the seriesPath is illegal
-     *                       or the permission already exists.
+     *                       or the permission already exists. 用户不存在，权限非法，权限已经存在，则产生异常
      */
     void grantPrivilegeToUser(String username, String path, int privilegeId) throws AuthException;
 
     /**
      * Revoke a privilege on seriesPath from a user.
+     * 在某个路径上移除一个权限
      *
      * @param username    The username of the user from which the privilege should be removed.
      * @param path        The seriesPath on which the privilege takes effect. If the privilege is a
@@ -85,6 +90,7 @@ public interface IAuthorizer {
 
     /**
      * Add a role.
+     * 添加一个角色
      *
      * @param roleName the name of the role to be added.
      * @throws AuthException if exception raised when adding the role or the role already exists.
@@ -93,6 +99,7 @@ public interface IAuthorizer {
 
     /**
      * Delete a role.
+     * 删除一个角色
      *
      * @param roleName the name of the role tobe deleted.
      * @throws AuthException if exception raised when deleting the role or the role does not exists.
@@ -101,6 +108,7 @@ public interface IAuthorizer {
 
     /**
      * Add a privilege on a seriesPath to a role.
+     * 添加一个权限到某个路径或者角色中
      *
      * @param roleName    The name of the role to which the privilege is added.
      * @param path        The seriesPath on which the privilege takes effect. If the privilege is a
@@ -113,6 +121,7 @@ public interface IAuthorizer {
 
     /**
      * Remove a privilege on a seriesPath from a role.
+     * 移除某个权限
      *
      * @param roleName    The name of the role from which the privilege is removed.
      * @param path        The seriesPath on which the privilege takes effect. If the privilege is a
@@ -125,6 +134,7 @@ public interface IAuthorizer {
 
     /**
      * Add a role to a user.
+     * 将某个权限给某个用户
      *
      * @param roleName The name of the role to be added.
      * @param username The name of the user to which the role is added.
@@ -257,6 +267,7 @@ public interface IAuthorizer {
 
     /**
      * clear all old roles info, replace the old roles with the new one
+     * 清楚所有的角色信息
      *
      * @param roles new roles info
      * @throws AuthException
