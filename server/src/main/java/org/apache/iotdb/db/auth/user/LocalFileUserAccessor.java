@@ -90,6 +90,7 @@ public class LocalFileUserAccessor implements IUserAccessor {
         File userProfile =
             SystemFileFactory.INSTANCE.getFile(
                 userDirPath + File.separator + username + IoTDBConstant.PROFILE_SUFFIX);
+        // 如果不存在，新建一个文件
         if (!userProfile.exists() || !userProfile.isFile()) {
             // System may crush before a newer file is renamed.
             File newProfile =
@@ -104,19 +105,23 @@ public class LocalFileUserAccessor implements IUserAccessor {
                 return null;
             }
         }
+        // 将用户的信息从流中读出来
         FileInputStream inputStream = new FileInputStream(userProfile);
         try (DataInputStream dataInputStream =
             new DataInputStream(new BufferedInputStream(inputStream))) {
             User user = new User();
             user.setName(IOUtils.readString(dataInputStream, STRING_ENCODING, strBufferLocal));
             user.setPassword(IOUtils.readString(dataInputStream, STRING_ENCODING, strBufferLocal));
+            // 第3个字段是权限的数量
             int privilegeNum = dataInputStream.readInt();
+            // 路径权限列表
             List<PathPrivilege> pathPrivilegeList = new ArrayList<>();
             for (int i = 0; i < privilegeNum; i++) {
                 pathPrivilegeList.add(
                     IOUtils.readPathPrivilege(dataInputStream, STRING_ENCODING, strBufferLocal));
             }
             user.setPrivilegeList(pathPrivilegeList);
+            // 获取角色的个数
             int roleNum = dataInputStream.readInt();
             List<String> roleList = new ArrayList<>();
             for (int i = 0; i < roleNum; i++) {
